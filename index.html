@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Estrategia de Instagram — Dúo Studio Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --crema:#efeddc;
+    --crema-2:#f7f5e9;
+    --oliva:#828f59;
+    --oliva-oscuro:#5c6640;
+    --oliva-suave:#aab489;
+    --rosa:#f8d0d8;
+    --rosa-oscuro:#e7a8b7;
+    --tinta:#33321f;
+    --tinta-suave:#6b6a52;
+    --borde:rgba(51,50,31,0.12);
+    --sombra: 0 18px 40px -18px rgba(51,50,31,0.25);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--crema);
+    color:var(--tinta);
+    font-family:'Poppins',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .pacifico{font-family:'Pacifico',cursive;}
+
+  /* ---------- background texture ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(130,143,89,0.10) 0, transparent 38%),
+      radial-gradient(circle at 88% 8%, rgba(248,208,216,0.35) 0, transparent 40%),
+      radial-gradient(circle at 92% 85%, rgba(130,143,89,0.10) 0, transparent 35%);
+  }
+
+  .wrap{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 24px 80px;}
+
+  /* ---------- header ---------- */
+  header{
+    padding:48px 0 28px;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:20px;
+    border-bottom:1px solid var(--borde);
+    margin-bottom:40px; flex-wrap:wrap;
+  }
+  .brand-mark{display:flex; flex-direction:column; gap:6px;}
+  .brand-mark .duo{font-size:14px; letter-spacing:.16em; text-transform:uppercase; color:var(--oliva-oscuro); font-weight:600;}
+  .brand-mark h1{margin:0; font-size:30px; font-weight:600; line-height:1.15;}
+  .brand-mark h1 span{font-family:'Pacifico',cursive; font-size:32px; color:var(--oliva-oscuro); font-weight:400;}
+  .kicker{
+    max-width:300px; font-size:13.5px; color:var(--tinta-suave); text-align:right;
+  }
+  @media (max-width:680px){ .kicker{text-align:left; max-width:100%;} header{flex-direction:column; align-items:flex-start;} }
+
+  /* ---------- intro ---------- */
+  .intro{display:grid; grid-template-columns:1.3fr 1fr; gap:40px; margin-bottom:56px; align-items:start;}
+  @media (max-width:780px){.intro{grid-template-columns:1fr;}}
+  .intro h2{font-size:26px; margin:0 0 14px; font-weight:600;}
+  .intro p{color:var(--tinta-suave); margin:0 0 12px; font-size:15px;}
+  .pill-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px;}
+  .pill{
+    background:var(--crema-2); border:1px solid var(--borde); border-radius:30px;
+    padding:6px 14px; font-size:12.5px; color:var(--oliva-oscuro); font-weight:500;
+  }
+  .how-card{
+    background:#fff; border:1px solid var(--borde); border-radius:18px; padding:24px;
+    box-shadow:var(--sombra);
+  }
+  .how-card h3{margin:0 0 12px; font-size:15px; letter-spacing:.04em; text-transform:uppercase; color:var(--oliva-oscuro);}
+  .how-step{display:flex; gap:12px; margin-bottom:14px; font-size:13.5px;}
+  .how-step:last-child{margin-bottom:0;}
+  .how-num{
+    flex:none; width:24px; height:24px; border-radius:50%; background:var(--rosa);
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--oliva-oscuro);
+  }
+  .how-step p{margin:0; color:var(--tinta-suave);}
+  .how-step b{color:var(--tinta); font-weight:600;}
+
+  /* ---------- form card ---------- */
+  .panel{
+    background:#fff; border:1px solid var(--borde); border-radius:22px; padding:36px;
+    box-shadow:var(--sombra); margin-bottom:48px;
+  }
+  .panel h2{margin:0 0 6px; font-size:22px;}
+  .panel .sub{color:var(--tinta-suave); font-size:14px; margin:0 0 28px;}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:680px){.grid2{grid-template-columns:1fr;}}
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block; font-size:12.5px; font-weight:600; letter-spacing:.03em;
+    text-transform:uppercase; color:var(--oliva-oscuro); margin-bottom:7px;
+  }
+  .field .hint{display:block; font-size:11.5px; color:var(--tinta-suave); font-weight:400; text-transform:none; letter-spacing:0; margin-top:3px;}
+  input[type=text], input[type=email], textarea, select{
+    width:100%; border:1.5px solid var(--borde); border-radius:12px; padding:12px 14px;
+    font-family:'Poppins',sans-serif; font-size:14.5px; color:var(--tinta); background:var(--crema-2);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  textarea{resize:vertical; min-height:90px;}
+  input:focus, textarea:focus, select:focus{
+    outline:none; border-color:var(--oliva); box-shadow:0 0 0 3px rgba(130,143,89,0.18); background:#fff;
+  }
+  select{appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%235c6640' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 16px center; padding-right:38px;
+  }
+  .chip-group{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    border:1.5px solid var(--borde); background:var(--crema-2); border-radius:30px; padding:8px 16px;
+    font-size:13px; cursor:pointer; user-select:none; transition:all .15s; color:var(--tinta-suave);
+  }
+  .chip.active{background:var(--oliva); border-color:var(--oliva); color:#fff; font-weight:500;}
+
+  .submit-row{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-top:8px;}
+  .btn{
+    background:var(--oliva); color:#fff; border:none; border-radius:30px; padding:15px 30px;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:14.5px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:10px; transition:transform .15s, background .15s;
+    box-shadow:0 10px 24px -10px rgba(92,102,64,0.6);
+  }
+  .btn:hover{background:var(--oliva-oscuro); transform:translateY(-1px);}
+  .btn:disabled{opacity:.6; cursor:default; transform:none;}
+  .btn.secondary{background:transparent; color:var(--oliva-oscuro); border:1.5px solid var(--oliva); box-shadow:none;}
+  .btn.secondary:hover{background:var(--crema-2);}
+  .req-note{font-size:12px; color:var(--tinta-suave);}
+  .error-box{
+    background:#fdf0ee; border:1px solid #e9b9b0; color:#9a4a3b; border-radius:12px;
+    padding:12px 16px; font-size:13.5px; margin-top:16px; display:none;
+  }
+
+  /* ---------- loading ---------- */
+  .loading-card{
+    display:none; text-align:center; padding:60px 24px; background:#fff; border-radius:22px;
+    border:1px solid var(--borde); box-shadow:var(--sombra); margin-bottom:48px;
+  }
+  .loading-card .spin{
+    width:46px; height:46px; border-radius:50%; border:4px solid var(--crema-2);
+    border-top-color:var(--oliva); margin:0 auto 22px; animation:spin 0.9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-card h3{margin:0 0 8px; font-size:18px;}
+  .loading-card p{color:var(--tinta-suave); font-size:13.5px; margin:0;}
+  .loading-msgs{margin-top:18px; font-size:12.5px; color:var(--oliva-oscuro); font-weight:500; min-height:18px;}
+
+  /* ---------- results ---------- */
+  #results{display:none;}
+  .results-head{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; flex-wrap:wrap;
+  }
+  .results-head h2{margin:0; font-size:24px;}
+  .results-head .company-tag{font-family:'Pacifico',cursive; color:var(--oliva-oscuro); font-size:20px;}
+  .actions-row{display:flex; gap:10px; flex-wrap:wrap;}
+
+  .tabs{
+    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; padding-bottom:18px; border-bottom:1px solid var(--borde);
+  }
+  .tab{
+    border:1.5px solid var(--borde); background:var(--crema-2); border-radius:30px; padding:9px 16px;
+    font-size:12.5px; font-weight:500; cursor:pointer; color:var(--tinta-suave); display:flex; align-items:center; gap:7px;
+    transition:all .15s;
+  }
+  .tab .n{
+    width:18px; height:18px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; color:var(--oliva-oscuro); flex:none;
+  }
+  .tab.active{background:var(--tinta); border-color:var(--tinta); color:#fff;}
+  .tab.active .n{background:var(--rosa); color:var(--oliva-oscuro);}
+
+  .section-card{
+    display:none; background:#fff; border:1px solid var(--borde); border-radius:22px; padding:34px;
+    box-shadow:var(--sombra);
+  }
+  .section-card.active{display:block;}
+  .section-card h3{
+    margin:0 0 4px; font-size:20px; display:flex; align-items:center; gap:10px;
+  }
+  .section-card h3 .tag{
+    font-size:11px; background:var(--rosa); color:var(--oliva-oscuro); padding:4px 10px; border-radius:20px;
+    font-weight:700; letter-spacing:.04em;
+  }
+  .section-card .desc{color:var(--tinta-suave); font-size:13px; margin:0 0 22px;}
+  .section-body{font-size:14.5px; color:var(--tinta);}
+  .section-body h4{font-size:14px; margin:22px 0 8px; color:var(--oliva-oscuro); font-weight:600;}
+  .section-body h4:first-child{margin-top:0;}
+  .section-body ul{margin:0 0 14px; padding-left:20px;}
+  .section-body li{margin-bottom:7px;}
+  .section-body p{margin:0 0 12px;}
+  .swatches{display:flex; gap:14px; flex-wrap:wrap; margin:10px 0 18px;}
+  .swatch{display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--tinta-suave);}
+  .swatch .sq{width:54px; height:54px; border-radius:12px; border:1px solid var(--borde);}
+  .calendar-table{width:100%; border-collapse:collapse; font-size:13px; margin-top:6px;}
+  .calendar-table th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--oliva-oscuro);
+    border-bottom:2px solid var(--borde); padding:8px 10px;
+  }
+  .calendar-table td{padding:9px 10px; border-bottom:1px solid var(--borde); vertical-align:top;}
+  .calendar-table tr:last-child td{border-bottom:none;}
+  .fmt-badge{
+    display:inline-block; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:14px; background:var(--crema-2); color:var(--oliva-oscuro);
+  }
+  .funnel-stage{
+    border-left:3px solid var(--rosa); padding:4px 0 14px 16px; margin-bottom:6px;
+  }
+  .funnel-stage h4{margin:0 0 4px;}
+  .copy-mini{
+    background:none; border:1px solid var(--borde); border-radius:20px; padding:6px 13px; font-size:11.5px;
+    color:var(--oliva-oscuro); cursor:pointer; font-family:'Poppins',sans-serif; font-weight:500;
+  }
+  .copy-mini:hover{background:var(--crema-2);}
+
+  footer{text-align:center; color:var(--tinta-suave); font-size:12.5px; padding:30px 0 10px;}
+  footer .pacifico{font-size:15px; color:var(--oliva-oscuro);}
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); opacity:0;
+    background:var(--tinta); color:#fff; padding:10px 22px; border-radius:30px; font-size:13px; font-weight:500;
+    transition:all .25s; z-index:50; pointer-events:none;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <header>
+    <div class="brand-mark">
+      <span class="duo">Dúo Studio Digital</span>
+      <h1>Generador de <span>estrategia</span> de Instagram</h1>
+    </div>
+    <div class="kicker">Una herramienta de Dúo Studio Digital para emprendedores, freelancers y marcas que quieren ordenar su presencia en Instagram con un plan real, no con consejos genéricos.</div>
+  </header>
+
+  <section class="intro">
+    <div>
+      <h2>Completá un formulario. Recibí un plan completo.</h2>
+      <p>Contanos cómo es tu empresa o emprendimiento y la herramienta genera, en minutos, una estrategia de Instagram a medida: qué publicar, cuándo, para quién, con qué estética y con qué presupuesto.</p>
+      <p>No es una plantilla genérica: la IA cruza tus respuestas (rubro, público, objetivo, tono) para entregarte un plan pensado específicamente para tu negocio.</p>
+      <div class="pill-row">
+        <span class="pill">10 entregables</span>
+        <span class="pill">100% personalizado</span>
+        <span class="pill">Listo para copiar y usar</span>
+        <span class="pill">Sin login</span>
+      </div>
+    </div>
+    <div class="how-card">
+      <h3>Cómo funciona</h3>
+      <div class="how-step"><div class="how-num">1</div><p><b>Completás el formulario</b> con datos de tu empresa: rubro, productos, público, objetivo y tono de marca.</p></div>
+      <div class="how-step"><div class="how-num">2</div><p><b>La IA analiza tus respuestas</b> y construye una estrategia coherente entre todos los entregables.</p></div>
+      <div class="how-step"><div class="how-num">3</div><p><b>Recibís 10 secciones</b> organizadas en pestañas: estrategia, calendario, ideas, paleta, público, competencia, embudo y anuncios.</p></div>
+      <div class="how-step"><div class="how-num">4</div><p><b>Copiás o descargás</b> cada sección para usarla directamente en tu Instagram.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ FORM ============ -->
+  <div class="panel" id="formPanel">
+
+    <h2>Contanos sobre tu empresa</h2>
+    <p class="sub">Cuanto más específico seas, más útil va a ser el resultado. Todos los campos marcados son importantes para personalizar tu estrategia.</p>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Nombre de la empresa o emprendimiento *</label>
+        <input type="text" id="f_nombre" placeholder="Ej: Vita Studio">
+      </div>
+      <div class="field">
+        <label>Rubro / industria *</label>
+        <input type="text" id="f_rubro" placeholder="Ej: estudio de pilates y bienestar">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>¿Qué hace tu empresa? Descripción breve *
+        <span class="hint">Productos o servicios principales, qué te diferencia, hace cuánto existe.</span>
+      </label>
+      <textarea id="f_descripcion" placeholder="Ej: Somos un estudio de pilates boutique en Palermo. Damos clases grupales y personalizadas, con un enfoque en bienestar integral. Llevamos 3 años y nos diferenciamos por la atención personalizada y un ambiente cálido."></textarea>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Ciudad / país</label>
+        <input type="text" id="f_ubicacion" placeholder="Ej: Buenos Aires, Argentina">
+      </div>
+      <div class="field">
+        <label>¿A quién le vendés hoy? (si lo sabés)
+          <span class="hint">Si no estás seguro, dejalo en blanco: la IA te va a proponer un público.</span>
+        </label>
+        <input type="text" id="f_publico_actual" placeholder="Ej: mujeres de 28 a 45 años, profesionales">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Objetivo principal con Instagram *</label>
+      <div class="chip-group" id="grp_objetivo">
+        <div class="chip" data-v="Conseguir más clientes/ventas">Conseguir más clientes/ventas</div>
+        <div class="chip" data-v="Dar a conocer la marca">Dar a conocer la marca</div>
+        <div class="chip" data-v="Fidelizar a clientes actuales">Fidelizar a clientes actuales</div>
+        <div class="chip" data-v="Posicionarse como referente del rubro">Posicionarse como referente</div>
+        <div class="chip" data-v="Lanzar un producto o servicio nuevo">Lanzar un producto nuevo</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tono de marca *</label>
+      <div class="chip-group" id="grp_tono">
+        <div class="chip" data-v="Cercano y cálido">Cercano y cálido</div>
+        <div class="chip" data-v="Profesional y premium">Profesional y premium</div>
+        <div class="chip" data-v="Divertido y desenfadado">Divertido y desenfadado</div>
+        <div class="chip" data-v="Inspirador y aspiracional">Inspirador y aspiracional</div>
+        <div class="chip" data-v="Minimalista y editorial">Minimalista y editorial</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Presupuesto mensual para anuncios</label>
+        <select id="f_presupuesto">
+          <option value="Sin presupuesto por ahora, solo contenido orgánico">Sin presupuesto (solo orgánico)</option>
+          <option value="Menos de 100 USD al mes">Menos de 100 USD al mes</option>
+          <option value="Entre 100 y 300 USD al mes">Entre 100 y 300 USD al mes</option>
+          <option value="Entre 300 y 800 USD al mes">Entre 300 y 800 USD al mes</option>
+          <option value="Más de 800 USD al mes">Más de 800 USD al mes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Redes que ya usan / nivel actual</label>
+        <select id="f_nivel">
+          <option value="Recién están empezando, cuenta nueva o casi sin contenido">Recién empiezan (cuenta nueva)</option>
+          <option value="Publican de manera irregular, sin estrategia clara">Publican sin estrategia clara</option>
+          <option value="Publican seguido pero sin resultados claros">Publican seguido, sin resultados</option>
+          <option value="Tienen una comunidad activa y buscan escalar">Comunidad activa, buscan escalar</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Algo más que quieras contarnos (opcional)
+        <span class="hint">Competidores que admirás o querés superar, campañas anteriores, restricciones, lo que sea relevante.</span>
+      </label>
+      <textarea id="f_extra" placeholder="Ej: Nuestro principal competidor es X. Probamos anuncios una vez pero no supimos medir resultados."></textarea>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="submit-row">
+      <span class="req-note">* Campos necesarios para generar la estrategia</span>
+      <button class="btn" id="btnGenerar">✨ Generar mi estrategia completa</button>
+    </div>
+  </div>
+
+  <!-- ============ LOADING ============ -->
+  <div class="loading-card" id="loadingCard">
+    <div class="spin"></div>
+    <h3>Armando tu estrategia…</h3>
+    <p>Estamos cruzando tus respuestas para construir un plan coherente entre todos los entregables.</p>
+    <div class="loading-msgs" id="loadingMsgs"></div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="results">
+    <div class="results-head">
+      <div>
+        <h2>Tu estrategia, lista</h2>
+        <div class="company-tag" id="companyTag"></div>
+      </div>
+      <div class="actions-row">
+        <button class="btn secondary" id="btnNueva">↺ Generar otra</button>
+        <button class="btn" id="btnDescargar">⬇ Descargar todo (.txt)</button>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+    <div id="sections"></div>
+  </div>
+
+  <footer>
+    Hecho con <span class="pacifico">cariño</span> por Dúo Studio Digital — @duostudio.digital
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SECTIONS = [
+  {key:"estrategia", label:"Estrategia general", title:"Estrategia de Instagram"},
+  {key:"calendario", label:"Calendario mensual", title:"Calendario mensual de contenido"},
+  {key:"reels", label:"Ideas de Reels", title:"Ideas de Reels"},
+  {key:"stories", label:"Ideas de Stories", title:"Ideas de Stories"},
+  {key:"paleta", label:"Paleta de colores", title:"Paleta de colores"},
+  {key:"tipografias", label:"Tipografías", title:"Tipografías sugeridas"},
+  {key:"publico", label:"Público objetivo", title:"Público objetivo"},
+  {key:"competencia", label:"Competencia", title:"Análisis de competencia"},
+  {key:"embudo", label:"Embudo de ventas", title:"Embudo de ventas"},
+  {key:"anuncios", label:"Plan de anuncios", title:"Plan de anuncios"},
+];
+
+let currentData = null;
+let currentCompany = "";
+const chipGroups = ["grp_objetivo","grp_tono"];
+chipGroups.forEach(id=>{
+  document.getElementById(id).addEventListener("click", e=>{
+    const chip = e.target.closest(".chip");
+    if(!chip) return;
+    [...document.getElementById(id).children].forEach(c=>c.classList.remove("active"));
+    chip.classList.add("active");
+  });
+});
+
+function getChipValue(id){
+  const el = document.getElementById(id).querySelector(".chip.active");
+  return el ? el.dataset.v : "";
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+const loadingPhrases = [
+  "Analizando el rubro y el tono de marca…",
+  "Diseñando el público objetivo…",
+  "Armando el calendario de contenido…",
+  "Pensando ideas de Reels y Stories…",
+  "Definiendo el embudo de ventas…",
+  "Calculando el plan de anuncios…",
+  "Puliendo los últimos detalles…"
+];
+let loadingInterval = null;
+function startLoadingMsgs(){
+  let i=0;
+  const el = document.getElementById("loadingMsgs");
+  el.textContent = loadingPhrases[0];
+  loadingInterval = setInterval(()=>{
+    i = (i+1) % loadingPhrases.length;
+    el.textContent = loadingPhrases[i];
+  }, 2200);
+}
+function stopLoadingMsgs(){ clearInterval(loadingInterval); }
+
+document.getElementById("btnGenerar").addEventListener("click", generarEstrategia);
+document.getElementById("btnNueva").addEventListener("click", ()=>{
+  document.getElementById("results").style.display = "none";
+  document.getElementById("formPanel").style.display = "block";
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+document.getElementById("btnDescargar").addEventListener("click", descargarTodo);
+
+function validar(){
+  const required = {
+    "f_nombre":"el nombre de tu empresa",
+    "f_rubro":"el rubro",
+    "f_descripcion":"la descripción de tu empresa"
+  };
+  for(const id in required){
+    if(!document.getElementById(id).value.trim()){
+      return "Por favor completá " + required[id] + ".";
+    }
+  }
+  if(!getChipValue("grp_objetivo")) return "Elegí un objetivo principal con Instagram.";
+  if(!getChipValue("grp_tono")) return "Elegí un tono de marca.";
+  return null;
+}
+
+async function generarEstrategia(){
+  const errBox = document.getElementById("errorBox");
+  errBox.style.display = "none";
+  const errMsg = validar();
+  if(errMsg){
+    errBox.textContent = errMsg;
+    errBox.style.display = "block";
+    return;
+  }
+
+  const datos = {
+    nombre: document.getElementById("f_nombre").value.trim(),
+    rubro: document.getElementById("f_rubro").value.trim(),
+    descripcion: document.getElementById("f_descripcion").value.trim(),
+    ubicacion: document.getElementById("f_ubicacion").value.trim() || "no especificada",
+    publico_actual: document.getElementById("f_publico_actual").value.trim() || "no especificado, proponer uno",
+    objetivo: getChipValue("grp_objetivo"),
+    tono: getChipValue("grp_tono"),
+    presupuesto: document.getElementById("f_presupuesto").value,
+    nivel: document.getElementById("f_nivel").value,
+    extra: document.getElementById("f_extra").value.trim() || "ninguno"
+  };
+
+  document.getElementById("formPanel").style.display = "none";
+  document.getElementById("loadingCard").style.display = "block";
+  startLoadingMsgs();
+
+  try{
+    const response = await fetch("/api/generate", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ datos })
+    });
+    const parsed = await response.json();
+    if(!response.ok || parsed.error){
+      throw new Error(parsed.error || "Error desconocido");
+    }
+    currentData = parsed;
+    currentCompany = datos.nombre;
+    renderResultados(parsed, datos.nombre);
+  }catch(err){
+    document.getElementById("loadingCard").style.display = "none";
+    document.getElementById("formPanel").style.display = "block";
+    const errBox = document.getElementById("errorBox");
+    errBox.textContent = "Hubo un problema generando la estrategia. Intentá nuevamente en unos segundos.";
+    errBox.style.display = "block";
+    console.error(err);
+  }finally{
+    stopLoadingMsgs();
+  }
+}
+
+function renderResultados(data, nombreEmpresa){
+  document.getElementById("loadingCard").style.display = "none";
+  document.getElementById("companyTag").textContent = nombreEmpresa;
+
+  const tabsEl = document.getElementById("tabs");
+  const sectionsEl = document.getElementById("sections");
+  tabsEl.innerHTML = "";
+  sectionsEl.innerHTML = "";
+
+  SECTIONS.forEach((s, idx)=>{
+    const tab = document.createElement("div");
+    tab.className = "tab" + (idx===0?" active":"");
+    tab.dataset.key = s.key;
+    tab.innerHTML = `<span class="n">${idx+1}</span> ${s.label}`;
+    tab.addEventListener("click", ()=>switchTab(s.key));
+    tabsEl.appendChild(tab);
+
+    const card = document.createElement("div");
+    card.className = "section-card" + (idx===0?" active":"");
+    card.dataset.key = s.key;
+    card.innerHTML = buildSectionHTML(s, data[s.key], idx);
+    sectionsEl.appendChild(card);
+  });
+
+  // wire copy buttons
+  sectionsEl.querySelectorAll(".copy-mini").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const target = document.querySelector(btn.dataset.target);
+      navigator.clipboard.writeText(target.innerText).then(()=>showToast("Copiado ✓"));
+    });
+  });
+
+  document.getElementById("results").style.display = "block";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function switchTab(key){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.key===key));
+  document.querySelectorAll(".section-card").forEach(c=>c.classList.toggle("active", c.dataset.key===key));
+}
+
+function buildSectionHTML(s, content, idx){
+  let body = "";
+  if(s.key === "calendario" && content && content.semanas){
+    body += content.intro ? `<p>${content.intro}</p>` : "";
+    content.semanas.forEach(sem=>{
+      body += `<h4>${sem.semana}</h4><table class="calendar-table"><tr><th>Día</th><th>Formato</th><th>Tema</th></tr>`;
+      sem.items.forEach(it=>{
+        body += `<tr><td>${it.dia}</td><td><span class="fmt-badge">${it.formato}</span></td><td>${it.tema}</td></tr>`;
+      });
+      body += `</table>`;
+    });
+  } else if(s.key === "paleta" && content && content.colores){
+    body += content.intro ? `<p>${content.intro}</p>` : "";
+    body += `<div class="swatches">`;
+    content.colores.forEach(c=>{
+      body += `<div class="swatch"><div class="sq" style="background:${c.hex}"></div><b>${c.nombre}</b><span>${c.hex}</span></div>`;
+    });
+    body += `</div><ul>`;
+    content.colores.forEach(c=>{ body += `<li><b>${c.nombre} (${c.hex}):</b> ${c.uso}</li>`; });
+    body += `</ul>`;
+  } else {
+    body = content || "<p>Sin contenido disponible.</p>";
+  }
+
+  return `
+    <h3>${s.title} <span class="tag">${String(idx+1).padStart(2,"0")} / 10</span></h3>
+    <p class="desc">Generado a partir de tus respuestas en el formulario.</p>
+    <div style="text-align:right; margin-bottom:14px;">
+      <button class="copy-mini" data-target="#body-${s.key}">Copiar sección</button>
+    </div>
+    <div class="section-body" id="body-${s.key}">${body}</div>
+  `;
+}
+
+function descargarTodo(){
+  if(!currentData) return;
+  let out = `ESTRATEGIA DE INSTAGRAM — ${currentCompany}\nGenerado por Dúo Studio Digital\n\n`;
+  SECTIONS.forEach(s=>{
+    out += `\n========================================\n${s.title.toUpperCase()}\n========================================\n`;
+    const c = currentData[s.key];
+    if(s.key === "calendario" && c && c.semanas){
+      out += (c.intro||"") + "\n";
+      c.semanas.forEach(sem=>{
+        out += `\n${sem.semana}\n`;
+        sem.items.forEach(it=> out += `  - ${it.dia} | ${it.formato} | ${it.tema}\n`);
+      });
+    } else if(s.key === "paleta" && c && c.colores){
+      out += (c.intro||"") + "\n";
+      c.colores.forEach(col=> out += `  - ${col.nombre} (${col.hex}): ${col.uso}\n`);
+    } else {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = c || "";
+      out += tmp.innerText + "\n";
+    }
+  });
+  const blob = new Blob([out], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Estrategia-Instagram-${currentCompany.replace(/\s+/g,"-")}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("Descargado ✓");
+}
+</script>
+</body>
+</html>
