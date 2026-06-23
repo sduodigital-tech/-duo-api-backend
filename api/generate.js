@@ -88,7 +88,7 @@ Genera el JSON completo siguiendo exactamente la estructura indicada.`;
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 4000,
+        max_tokens: 8000,
         system: systemPrompt,
         messages: [{ role: "user", content: userPrompt }]
       })
@@ -101,6 +101,9 @@ Genera el JSON completo siguiendo exactamente la estructura indicada.`;
     }
 
     const data = await response.json();
+        if (data.stop_reason === "max_tokens") {
+            console.error("Claude se quedo sin tokens (stop_reason: max_tokens). La respuesta puede venir incompleta.");
+        }
     let text = (data.content || [])
       .filter((b) => b.type === "text")
       .map((b) => b.text)
