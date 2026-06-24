@@ -88,7 +88,7 @@ Genera el JSON completo siguiendo exactamente la estructura indicada.`;
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 8000,
+        max_tokens: 16000,
         system: systemPrompt,
         messages: [{ role: "user", content: userPrompt }]
       })
@@ -101,9 +101,17 @@ Genera el JSON completo siguiendo exactamente la estructura indicada.`;
     }
 
     const data = await response.json();
-        if (data.stop_reason === "max_tokens") {
-            console.error("Claude se quedo sin tokens (stop_reason: max_tokens). La respuesta puede venir incompleta.");
-        }
+
+    // Si Claude se quedó sin tokens, la respuesta viene cortada a mitad de un
+    // string y el JSON.parse va a fallar sí o sí. En vez de intentar parsear
+    // algo roto y devolver un error 500 genérico, avisamos claro qué pasó.
+    if (data.stop_reason === "max_tokens") {
+      console.error("Claude se quedo sin tokens (stop_reason: max_tokens). La respuesta vino incompleta.");
+      return res.status(502).json({
+        error: "La estrategia generada quedó demasiado larga y se cortó antes de terminar. Probá generarla de nuevo (a veces ayuda achicar un poco la descripción del negocio)."
+      });
+    }
+
     let text = (data.content || [])
       .filter((b) => b.type === "text")
       .map((b) => b.text)
@@ -117,7 +125,14 @@ Genera el JSON completo siguiendo exactamente la estructura indicada.`;
     } catch (e) {
       const start = text.indexOf("{");
       const end = text.lastIndexOf("}");
-      parsed = JSON.parse(text.substring(start, end + 1));
+      try {
+        parsed = JSON.parse(text.substring(start, end + 1));
+      } catch (e2) {
+        console.error("No se pudo parsear el JSON de Claude:", e2);
+        return res.status(502).json({
+          error: "La respuesta de la IA no llegó en un formato válido. Probá generarla de nuevo."
+        });
+      }
     }
 
     return res.status(200).json(parsed);
